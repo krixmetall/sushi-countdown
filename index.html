@@ -1,4 +1,27 @@
-  <!-- IMPORTANTE: JS externo -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cuenta atrás: ¡vuelta al sushi!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0f172a;color:#e5e7eb;padding:2rem}
+    .wrap{max-width:600px;margin:auto}
+    h1{font-size:1.5rem;margin-bottom:1rem}
+    #clock{font-size:2rem;font-weight:bold;margin-top:1rem}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Cuenta atrás: ¡vuelta al sushi! 🍣</h1>
+    <label>Nombre: <input id="name" type="text" /></label><br><br>
+    <label>Fecha: <input id="date" type="date" /></label><br><br>
+    <button id="save">Guardar y generar enlace</button>
+    <div id="clock">--</div>
+  </div>
+
+  <!-- Carga el JS -->
   <script src="app.js" defer></script>
 </body>
 </html>
