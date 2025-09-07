@@ -59,8 +59,13 @@
       <section class="card">
         <div class="ring-wrap" aria-live="polite" aria-atomic="true">
           <svg width="280" height="280" viewBox="0 0 120 120" role="img" aria-label="Progreso hasta el Día del Sushi">
+            <defs>
+              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ff7a59"/><stop offset="100%" stop-color="#f59e0b"/>
+              </linearGradient>
+            </defs>
             <circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8" />
-            <circle class="ring" id="ring" cx="60" cy="60" r="52" fill="none" stroke-width="8" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="0 999" />
+            <circle class="ring" id="ring" cx="60" cy="60" r="52" fill="none" stroke-width="8" stroke-linecap="round" transform="rotate(-90 60 60)" stroke="url(#grad)" stroke-dasharray="0 999" />
           </svg>
           <div class="ring-text">
             <div class="small">Falta</div>
@@ -97,7 +102,7 @@
           </div>
         </div>
 
-        <!-- Lo que verá la persona al recibir el enlace -->
+        <!-- Modo compartido (sin tips) -->
         <div id="shareArt" class="hidden">
           <div class="sushi-grid" aria-hidden="true">
             🍣 🍙 🥢 🍤 🍥 
@@ -109,7 +114,7 @@
           </div>
         </div>
 
-        <!-- Tips solo para el modo edición -->
+        <!-- Tips solo para edición -->
         <div id="tips" class="tips">
           <div class="tip">Idea: mete el enlace en un QR y pégalo en una cajita de palillos. Clase y maldad a partes iguales.</div>
           <div class="tip">Antojos mientras tanto: maki de aguacate, tamago (tortilla), uramaki California cocido. Si hay dudas, consulta con su profesional de salud.</div>
@@ -123,7 +128,7 @@
 
   <div class="confetti" id="confetti" aria-hidden="true"></div>
 
-  <!-- JS externo -->
-  <script src="app.js" defer></script>
+  <!-- JS externo (forzamos actualización con ?v=3) -->
+  <script src="app.js?v=3" defer></script>
 </body>
 </html>
