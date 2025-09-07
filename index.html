@@ -4,24 +4,110 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cuenta atrás: ¡vuelta al sushi!</title>
+  <meta name="description" content="Cuenta atrás personalizable para el gran día de volver a comer sushi." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🍣</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0f172a;color:#e5e7eb;padding:2rem}
-    .wrap{max-width:600px;margin:auto}
-    h1{font-size:1.5rem;margin-bottom:1rem}
-    #clock{font-size:2rem;font-weight:bold;margin-top:1rem}
+    :root{--bg:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--ring:#334155;--card:#0b1222}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);
+         background:radial-gradient(1200px 800px at 80% -20%, #1f2937 0, transparent 50%),
+                    radial-gradient(1000px 600px at -20% 20%, #0b1222 0, transparent 60%), #0f172a}
+    .wrap{max-width:920px;margin:0 auto;padding:24px}
+    header{display:flex;gap:14px;align-items:center;justify-content:space-between;margin:10px 0 24px}
+    .brand{display:flex;gap:12px;align-items:center}.logo{font-size:30px}.title{font-weight:800;font-size:22px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid #1f2937;
+          box-shadow:0 10px 30px rgba(0,0,0,.35);border-radius:18px;padding:18px}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}@media(max-width:860px){.grid{grid-template-columns:1fr}}
+    .clock{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px}
+    .pill{min-width:120px;flex:1 1 160px;background:var(--card);border:1px solid #1e293b;border-radius:16px;padding:16px;text-align:center}
+    .num{font-size:42px;font-weight:800;line-height:1}.lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+    .controls{display:grid;gap:12px}label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    input[type="date"],input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;background:#0b1222;color:var(--text);
+      border:1px solid #1f2937;outline:none} input:focus{border-color:#334155;box-shadow:0 0 0 4px rgba(51,65,85,.35)}
+    .btns{display:flex;flex-wrap:wrap;gap:10px} button,.ghost{appearance:none;border:none;cursor:pointer;padding:12px 16px;border-radius:12px;font-weight:600}
+    .primary{background:linear-gradient(180deg,#fb923c,#f97316);color:#0b1222}.secondary{background:#111827;color:#e5e7eb;border:1px solid #374151}
+    .ghost{background:transparent;color:var(--muted)}
+    .ring-wrap{position:relative;display:grid;place-items:center;margin:8px auto;width:280px;height:280px}
+    svg{overflow:visible}.ring-bg{stroke:var(--ring);opacity:.6}.ring{stroke:#f97316;filter:drop-shadow(0 0 8px rgba(249,115,22,.45))}
+    .ring-text{position:absolute;text-align:center}.ring-text .big{font-size:44px;font-weight:800}.ring-text .small{font-size:12px;color:var(--muted)}
+    .tips{display:grid;gap:10px;margin-top:6px}.tip{background:#0b1222;border:1px dashed #334155;padding:12px 14px;border-radius:12px;font-size:14px}
+    footer{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}
+    .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}.piece{position:absolute;font-size:24px;animation:fall linear forwards}
+    @keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(var(--rot));opacity:.9}}
+    .success{color:#bbf7d0}.danger{color:#fecaca}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Cuenta atrás: ¡vuelta al sushi! 🍣</h1>
-    <label>Nombre: <input id="name" type="text" /></label><br><br>
-    <label>Fecha: <input id="date" type="date" /></label><br><br>
-    <button id="save">Guardar y generar enlace</button>
-    <div id="clock">--</div>
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">🍣</div>
+        <div>
+          <div class="title">Cuenta atrás: ¡vuelta al sushi!</div>
+          <div style="color:var(--muted);font-size:12px">Hazlo personal, comparte el enlace y suelta confeti cuando llegue el día.</div>
+        </div>
+      </div>
+      <a class="ghost" id="aboutBtn" href="#">¿Cómo funciona?</a>
+    </header>
+
+    <div class="grid">
+      <!-- IZQUIERDA: anillo + contador -->
+      <section class="card">
+        <div class="ring-wrap" aria-live="polite" aria-atomic="true">
+          <svg width="280" height="280" viewBox="0 0 120 120" role="img" aria-label="Progreso hasta el Día del Sushi">
+            <circle class="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8" />
+            <circle class="ring" id="ring" cx="60" cy="60" r="52" fill="none" stroke-width="8" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="0 999" />
+          </svg>
+          <div class="ring-text">
+            <div class="small">Falta</div>
+            <div class="big" id="bigDays">–</div>
+            <div class="small" id="bigLabel">días</div>
+          </div>
+        </div>
+
+        <div class="clock" id="clock">
+          <div class="pill"><div class="num" id="d">–</div><div class="lbl">Días</div></div>
+          <div class="pill"><div class="num" id="h">–</div><div class="lbl">Horas</div></div>
+          <div class="pill"><div class="num" id="m">–</div><div class="lbl">Minutos</div></div>
+          <div class="pill"><div class="num" id="s">–</div><div class="lbl">Segundos</div></div>
+        </div>
+        <div id="status" style="text-align:center;margin-top:10px"></div>
+      </section>
+
+      <!-- DERECHA: controles -->
+      <aside class="card">
+        <div class="controls">
+          <div>
+            <label for="name">Nombre de la homenajeada (opcional)</label>
+            <input id="name" type="text" placeholder="Ej.: Marta" autocomplete="name" />
+          </div>
+          <div>
+            <label for="date">Día del sushi (elige la fecha objetivo)</label>
+            <input id="date" type="date" />
+          </div>
+          <div class="btns">
+            <button class="primary" id="save">Guardar y generar enlace</button>
+            <button class="secondary" id="share">Compartir</button>
+            <button class="secondary" id="ics">Añadir al calendario (.ics)</button>
+            <button class="ghost" id="reset">Reiniciar</button>
+          </div>
+        </div>
+
+        <div class="tips">
+          <div class="tip">Idea: mete el enlace en un QR y pégalo en una cajita de palillos. Clase y maldad a partes iguales.</div>
+          <div class="tip">Antojos mientras tanto: maki de aguacate, tamago (tortilla), uramaki California cocido. Si hay dudas, consulta con su profesional de salud.</div>
+          <div class="tip">Truco: puedes pasar la URL con la fecha y el nombre ya metidos para que aparezca todo bonito al abrir.</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>Hecho con ❤️ y humor. No es consejo médico; elige la fecha que más ilusión os haga.</footer>
   </div>
 
-  <!-- Carga el JS -->
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <!-- JS externo -->
   <script src="app.js" defer></script>
 </body>
 </html>
