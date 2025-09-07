@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🍣</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--ring:#334155;--card:#0b1222}
+    :root{--bg:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--ring:#334155;--card:#0b1222;--accent:#ff7a59}
     *{box-sizing:border-box} html,body{height:100%}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);
          background:radial-gradient(1200px 800px at 80% -20%, #1f2937 0, transparent 50%),
@@ -26,16 +26,19 @@
     input[type="date"],input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;background:#0b1222;color:var(--text);
       border:1px solid #1f2937;outline:none} input:focus{border-color:#334155;box-shadow:0 0 0 4px rgba(51,65,85,.35)}
     .btns{display:flex;flex-wrap:wrap;gap:10px} button,.ghost{appearance:none;border:none;cursor:pointer;padding:12px 16px;border-radius:12px;font-weight:600}
-    .primary{background:linear-gradient(180deg,#fb923c,#f97316);color:#0b1222}.secondary{background:#111827;color:#e5e7eb;border:1px solid #374151}
+    .primary{background:linear-gradient(180deg,#ff7a59,#f97316);color:#0b1222}.secondary{background:#111827;color:#e5e7eb;border:1px solid #374151}
     .ghost{background:transparent;color:var(--muted)}
     .ring-wrap{position:relative;display:grid;place-items:center;margin:8px auto;width:280px;height:280px}
-    svg{overflow:visible}.ring-bg{stroke:var(--ring);opacity:.6}.ring{stroke:#f97316;filter:drop-shadow(0 0 8px rgba(249,115,22,.45))}
+    svg{overflow:visible}.ring-bg{stroke:var(--ring);opacity:.6}.ring{stroke:var(--accent);filter:drop-shadow(0 0 8px rgba(249,115,22,.45))}
     .ring-text{position:absolute;text-align:center}.ring-text .big{font-size:44px;font-weight:800}.ring-text .small{font-size:12px;color:var(--muted)}
     .tips{display:grid;gap:10px;margin-top:6px}.tip{background:#0b1222;border:1px dashed #334155;padding:12px 14px;border-radius:12px;font-size:14px}
     footer{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}
     .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}.piece{position:absolute;font-size:24px;animation:fall linear forwards}
     @keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(var(--rot));opacity:.9}}
     .success{color:#bbf7d0}.danger{color:#fecaca}
+    .hidden{display:none}
+    .sushi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;font-size:32px;padding:12px;background:#0b1222;
+      border:1px solid #1e293b;border-radius:12px;text-align:center}
   </style>
 </head>
 <body>
@@ -94,7 +97,20 @@
           </div>
         </div>
 
-        <div class="tips">
+        <!-- Lo que verá la persona al recibir el enlace -->
+        <div id="shareArt" class="hidden">
+          <div class="sushi-grid" aria-hidden="true">
+            🍣 🍙 🥢 🍤 🍥 
+            🍣 🍙 🥢 🍤 🍥 
+            🍣 🍙 🥢 🍤 🍥
+          </div>
+          <div style="font-size:14px;color:var(--muted);margin-top:8px;text-align:center">
+            ¡Listo para compartir! (sin spoilers 😉)
+          </div>
+        </div>
+
+        <!-- Tips solo para el modo edición -->
+        <div id="tips" class="tips">
           <div class="tip">Idea: mete el enlace en un QR y pégalo en una cajita de palillos. Clase y maldad a partes iguales.</div>
           <div class="tip">Antojos mientras tanto: maki de aguacate, tamago (tortilla), uramaki California cocido. Si hay dudas, consulta con su profesional de salud.</div>
           <div class="tip">Truco: puedes pasar la URL con la fecha y el nombre ya metidos para que aparezca todo bonito al abrir.</div>
